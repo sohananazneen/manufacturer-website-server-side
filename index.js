@@ -211,6 +211,15 @@ async function run() {
       const result = await reviewCollection.insertOne(newReview);
       res.send(result);
     });
+    // Health check route (Render & MongoDB সচল রাখার জন্য)
+    app.get("/api/health", async (req, res) => {
+      try {
+        const sampleData = await userCollection.findOne({});
+        res.status(200).json({ status: "OK", dataFound: !!sampleData });
+      } catch (error) {
+        res.status(500).json({ status: "Error", error: error.message });
+      }
+    });
   } finally {
   }
 }
